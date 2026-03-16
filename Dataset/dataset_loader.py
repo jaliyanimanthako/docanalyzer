@@ -1,15 +1,8 @@
 import os
 import sys
-from datasets import load_dataset, Dataset
-import json
+from datasets import load_dataset
 from configs.load_config import load_config
 
-# Add the parent directory (project root) to the search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(BASE_DIR, '../configs/config.yaml')
-
-CONFIG = load_config(config_path)
 
 def load_qna_dataset(dataset_name, split, subsample, seed=42):
     """Load dataset with robust field mapping and fallback."""
@@ -54,37 +47,8 @@ def map_dataset_fields(example):
             break
 
     return {
-        "instruction": instruction,
+        "question": question,
         "input": input_text,
         "output": output
     }
 
-
-# Load dataset
-dataset = load_qna_dataset(
-    CONFIG["dataset_name"],
-    CONFIG["dataset_split"],
-    CONFIG["dataset_subsample"]
-)
-
-print(f"\n📊 Dataset before cleaning: {len(dataset)} examples")
-
-# Map fields
-dataset = dataset.map(map_dataset_fields)
-
-# Drop rows with missing instruction or output
-dataset = dataset.filter(lambda x: x["instruction"] is not None and x["output"] is not None)
-
-print(f"📊 Dataset after cleaning: {len(dataset)} examples")
-print(f"✅ Dropped {CONFIG['dataset_subsample'] - len(dataset)} examples with missing data\n")
-
-# Split into train/validation
-split_dataset = dataset.train_test_split(
-    train_size=CONFIG["train_val_split"],
-)
-train_dataset = split_dataset["train"]
-val_dataset = split_dataset["test"]
-
-print(f"📊 Train: {len(train_dataset)} | Validation: {len(val_dataset)}")
-print("\n📝 Sample example:")
-print(train_dataset[0])
