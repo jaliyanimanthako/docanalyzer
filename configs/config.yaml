@@ -1,0 +1,51 @@
+
+# Model
+"base_model": "Qwen/Qwen2.5-1.5B-Instruct"
+# Alternative for tighter VRAM: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+# For GGUF export, prefer: "meta-llama/Llama-3.2-3B-Instruct" or Mistral models
+
+# Dataset
+"dataset_name": "Jaliyanimantha/aee-qa-dataset"
+"dataset_split": "train"
+"dataset_subsample": 500  # Colab-safe: 500 | Local: 1500
+"train_val_split": 0.9 # 90% train, 10% validation
+
+# Tokenization
+"max_length": 512  # Colab: 512 | Local: 1024
+
+# Training
+"num_train_epochs": 1
+"max_steps": 250  # Colab: 250 | Local: 600
+"per_device_train_batch_size": 1  # Colab: 1 | Local: 2
+"gradient_accumulation_steps": 64  # Colab: 64 | Local: 32
+"learning_rate": 2e-5
+"warmup_ratio": 0.03
+"logging_steps": 10
+"save_steps": 200
+"eval_steps": 100
+"save_total_limit": 2
+
+# LoRA
+"lora_r": 16
+"lora_alpha": 32
+"lora_dropout": 0.05
+"lora_target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+
+# Quantization
+"load_in_4bit": True
+"bnb_4bit_compute_dtype": compute_dtype
+"bnb_4bit_quant_type": "nf4"
+"bnb_4bit_use_double_quant": True
+
+# Output
+"output_dir": "outputs/adapter"
+"push_to_hub": False
+
+# Generation
+"max_new_tokens": 128
+"temperature": 0.0  # Deterministic
+"do_sample": True
+
+# HF credentials
+'hf_username': 'machinelearningzuu'
+'hub_model_name': 'zuucrew-medical-assistant'

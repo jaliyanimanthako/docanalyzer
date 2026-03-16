@@ -1,0 +1,23 @@
+# Core Training and LLM Libraries
+transformers==4.44.2
+datasets==2.20.0
+tokenizers==0.19.1
+accelerate==0.34.2
+peft==0.12.0
+trl==0.9.6
+bitsandbytes==0.43.1
+evaluate==0.4.2
+
+# Utilities and Data Processing
+numpy
+pandas
+scikit-learn
+rich
+pyyaml
+python-dotenv
+tqdm
+
+# Evaluation and GenAI
+pydantic>=2.0.0
+google-genai
+rouge-score
