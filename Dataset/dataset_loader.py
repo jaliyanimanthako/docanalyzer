@@ -9,14 +9,14 @@ def load_qna_dataset(dataset_name, split, subsample, seed=42):
 
     try:
         # Try loading from Hugging Face
-        print(f"📥 Loading dataset: {dataset_name}...")
+        print(f"Loading dataset: {dataset_name}...")
         dataset = load_dataset(dataset_name, split=split)
         dataset = dataset.shuffle(seed=seed).select(range(min(subsample, len(dataset))))
-        print(f"✅ Loaded {len(dataset)} examples from Hugging Face")
+        print(f"Loaded {len(dataset)} examples from Hugging Face")
 
     except Exception as e:
-        print(f"⚠️ Failed to load from Hugging Face: {e}")
-        print("🔄 Creating synthetic fallback dataset...")
+        print(f"Failed to load from Hugging Face: {e}")
+        print("Creating synthetic fallback dataset...")
 
 
     return dataset
@@ -26,7 +26,7 @@ def map_dataset_fields(example):
     """Robustly map dataset fields to instruction/input/output schema."""
 
     # Try to find instruction
-    question = None
+    instruction = None
     for key in ["instruction", "question", "prompt", "task"]:
         if key in example and example[key]:
             instruction = str(example[key]).strip()
@@ -47,7 +47,7 @@ def map_dataset_fields(example):
             break
 
     return {
-        "question": question,
+        "instruction": instruction,
         "input": input_text,
         "output": output
     }

@@ -60,6 +60,6 @@ token_lengths = np.array(token_lengths)
 train_dataset = train_dataset.map(build_sft_prompt)
 val_dataset = val_dataset.map(build_sft_prompt)
 
-print("✅ Prompts built for SFT")
-print("\n📝 Sample formatted prompt:")
+print("Prompts built for SFT")
+print("\nSample formatted prompt:")
 print(train_dataset[0]["text"][:500] + "...")

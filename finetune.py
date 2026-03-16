@@ -44,7 +44,7 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_use_double_quant=CONFIG["bnb_4bit_use_double_quant"],
 )
 
-print(f"📥 Loading base model: {CONFIG['base_model']}...")
+print(f"Loading base model: {CONFIG['base_model']}...")
 base_model = AutoModelForCausalLM.from_pretrained(
     CONFIG["base_model"],
     quantization_config=bnb_config,
@@ -53,7 +53,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
 )
 
 # Prepare model for k-bit training
-print("🔧 Preparing model for k-bit training...")
+print("Preparing model for k-bit training...")
 base_model = prepare_model_for_kbit_training(base_model)
 
 
@@ -68,7 +68,7 @@ lora_config = LoraConfig(
 )
 
 # Apply LoRA
-print("🔧 Applying LoRA adapters...")
+print("Applying LoRA adapters...")
 model = get_peft_model(base_model, lora_config)
 model.print_trainable_parameters()
 
@@ -116,7 +116,7 @@ print(f"LoRA rank: {CONFIG['lora_r']}")
 print("="*60)
 
 # Train
-print("\n🚀 Starting training...\n")
+print("\nStarting training...\n")
 train_result = trainer.train()
 
 # To resume from checkpoint, uncomment:
@@ -134,3 +134,9 @@ total_tokens = CONFIG['max_steps'] * effective_batch_size * CONFIG['max_length']
 tokens_per_sec = total_tokens / train_result.metrics.get('train_runtime', 1)
 print(f"Approximate tokens/second: {tokens_per_sec:.1f}")
 print("="*60)
+
+# Save final adapter
+print(f"\nSaving adapter to {CONFIG['output_dir']}...")
+trainer.save_model(CONFIG["output_dir"])
+tokenizer.save_pretrained(CONFIG["output_dir"])
+print("Adapter saved.")
